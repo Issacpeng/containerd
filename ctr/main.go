@@ -40,6 +40,7 @@ func main() {
 		VersionCommand,
 	}
 	app.Before = func(context *cli.Context) error {
+	    fmt.Println("###### ctr main debug #######")
 		if context.GlobalBool("debug") {
 			logrus.SetLevel(logrus.DebugLevel)
 		}

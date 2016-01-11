@@ -743,6 +743,7 @@ func NewAPIClient(cc *grpc.ClientConn) APIClient {
 }
 
 func (c *aPIClient) CreateContainer(ctx context.Context, in *CreateContainerRequest, opts ...grpc.CallOption) (*CreateContainerResponse, error) {
+    fmt.Println("###### APIClient CreateContainer #######\r\n")
 	out := new(CreateContainerResponse)
 	err := grpc.Invoke(ctx, "/types.API/CreateContainer", in, out, c.cc, opts...)
 	if err != nil {
@@ -752,6 +753,7 @@ func (c *aPIClient) CreateContainer(ctx context.Context, in *CreateContainerRequ
 }
 
 func (c *aPIClient) UpdateContainer(ctx context.Context, in *UpdateContainerRequest, opts ...grpc.CallOption) (*UpdateContainerResponse, error) {
+    fmt.Println("###### APIClient UpdateContainer #######\r\n")	
 	out := new(UpdateContainerResponse)
 	err := grpc.Invoke(ctx, "/types.API/UpdateContainer", in, out, c.cc, opts...)
 	if err != nil {
@@ -761,6 +763,7 @@ func (c *aPIClient) UpdateContainer(ctx context.Context, in *UpdateContainerRequ
 }
 
 func (c *aPIClient) Signal(ctx context.Context, in *SignalRequest, opts ...grpc.CallOption) (*SignalResponse, error) {
+    fmt.Println("###### APIClient Signal #######\r\n")	
 	out := new(SignalResponse)
 	err := grpc.Invoke(ctx, "/types.API/Signal", in, out, c.cc, opts...)
 	if err != nil {
@@ -770,6 +773,7 @@ func (c *aPIClient) Signal(ctx context.Context, in *SignalRequest, opts ...grpc.
 }
 
 func (c *aPIClient) AddProcess(ctx context.Context, in *AddProcessRequest, opts ...grpc.CallOption) (*AddProcessResponse, error) {
+    fmt.Println("###### APIClient AddProcess #######\r\n")	
 	out := new(AddProcessResponse)
 	err := grpc.Invoke(ctx, "/types.API/AddProcess", in, out, c.cc, opts...)
 	if err != nil {
@@ -779,6 +783,7 @@ func (c *aPIClient) AddProcess(ctx context.Context, in *AddProcessRequest, opts 
 }
 
 func (c *aPIClient) CreateCheckpoint(ctx context.Context, in *CreateCheckpointRequest, opts ...grpc.CallOption) (*CreateCheckpointResponse, error) {
+    fmt.Println("###### APIClient CreateCheckpoint #######\r\n")	
 	out := new(CreateCheckpointResponse)
 	err := grpc.Invoke(ctx, "/types.API/CreateCheckpoint", in, out, c.cc, opts...)
 	if err != nil {
@@ -788,6 +793,7 @@ func (c *aPIClient) CreateCheckpoint(ctx context.Context, in *CreateCheckpointRe
 }
 
 func (c *aPIClient) DeleteCheckpoint(ctx context.Context, in *DeleteCheckpointRequest, opts ...grpc.CallOption) (*DeleteCheckpointResponse, error) {
+    fmt.Println("###### APIClient DeleteCheckpoint #######\r\n")
 	out := new(DeleteCheckpointResponse)
 	err := grpc.Invoke(ctx, "/types.API/DeleteCheckpoint", in, out, c.cc, opts...)
 	if err != nil {
@@ -797,6 +803,7 @@ func (c *aPIClient) DeleteCheckpoint(ctx context.Context, in *DeleteCheckpointRe
 }
 
 func (c *aPIClient) ListCheckpoint(ctx context.Context, in *ListCheckpointRequest, opts ...grpc.CallOption) (*ListCheckpointResponse, error) {
+    fmt.Println("###### APIClient ListCheckpoint #######\r\n")
 	out := new(ListCheckpointResponse)
 	err := grpc.Invoke(ctx, "/types.API/ListCheckpoint", in, out, c.cc, opts...)
 	if err != nil {
@@ -806,6 +813,7 @@ func (c *aPIClient) ListCheckpoint(ctx context.Context, in *ListCheckpointReques
 }
 
 func (c *aPIClient) State(ctx context.Context, in *StateRequest, opts ...grpc.CallOption) (*StateResponse, error) {
+    fmt.Println("###### APIClient State #######\r\n")
 	out := new(StateResponse)
 	err := grpc.Invoke(ctx, "/types.API/State", in, out, c.cc, opts...)
 	if err != nil {
@@ -815,10 +823,13 @@ func (c *aPIClient) State(ctx context.Context, in *StateRequest, opts ...grpc.Ca
 }
 
 func (c *aPIClient) Events(ctx context.Context, in *EventsRequest, opts ...grpc.CallOption) (API_EventsClient, error) {
+    fmt.Println("###### APIClient Events #######\r\n")
 	stream, err := grpc.NewClientStream(ctx, &_API_serviceDesc.Streams[0], c.cc, "/types.API/Events", opts...)
 	if err != nil {
 		return nil, err
 	}
+    fmt.Printf("###### APIClient stream: %v #######\r\n", stream)
+    fmt.Printf("###### APIClient in: %v #######\r\n", in)
 	x := &aPIEventsClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
@@ -847,6 +858,7 @@ func (x *aPIEventsClient) Recv() (*Event, error) {
 }
 
 func (c *aPIClient) GetStats(ctx context.Context, in *StatsRequest, opts ...grpc.CallOption) (API_GetStatsClient, error) {
+    fmt.Println("###### APIClient GetStats #######\r\n")
 	stream, err := grpc.NewClientStream(ctx, &_API_serviceDesc.Streams[1], c.cc, "/types.API/GetStats", opts...)
 	if err != nil {
 		return nil, err
@@ -894,10 +906,13 @@ type APIServer interface {
 }
 
 func RegisterAPIServer(s *grpc.Server, srv APIServer) {
+    fmt.Printf("###### RegisterAPIServer s: %v #######\r\n", s)
+    fmt.Printf("###### RegisterAPIServer srv: %v #######\r\n", srv)
 	s.RegisterService(&_API_serviceDesc, srv)
 }
 
 func _API_CreateContainer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_CreateContainer_Handler #######\r\n")
 	in := new(CreateContainerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -910,6 +925,7 @@ func _API_CreateContainer_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _API_UpdateContainer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_UpdateContainer_Handler #######\r\n")
 	in := new(UpdateContainerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -922,6 +938,7 @@ func _API_UpdateContainer_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _API_Signal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_Signal_Handler #######\r\n")
 	in := new(SignalRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -934,6 +951,7 @@ func _API_Signal_Handler(srv interface{}, ctx context.Context, dec func(interfac
 }
 
 func _API_AddProcess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_AddProcess_Handler #######\r\n")
 	in := new(AddProcessRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -946,6 +964,7 @@ func _API_AddProcess_Handler(srv interface{}, ctx context.Context, dec func(inte
 }
 
 func _API_CreateCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_CreateCheckpoint_Handler #######\r\n")
 	in := new(CreateCheckpointRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -958,6 +977,7 @@ func _API_CreateCheckpoint_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _API_DeleteCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_DeleteCheckpoint_Handler #######\r\n")
 	in := new(DeleteCheckpointRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -970,6 +990,7 @@ func _API_DeleteCheckpoint_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _API_ListCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_ListCheckpoint_Handler #######\r\n")
 	in := new(ListCheckpointRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -982,6 +1003,7 @@ func _API_ListCheckpoint_Handler(srv interface{}, ctx context.Context, dec func(
 }
 
 func _API_State_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+    fmt.Println("###### APIServer _API_State_Handler #######\r\n")
 	in := new(StateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -994,6 +1016,7 @@ func _API_State_Handler(srv interface{}, ctx context.Context, dec func(interface
 }
 
 func _API_Events_Handler(srv interface{}, stream grpc.ServerStream) error {
+    fmt.Println("###### APIServer _API_Events_Handler #######\r\n")
 	m := new(EventsRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
@@ -1015,6 +1038,7 @@ func (x *aPIEventsServer) Send(m *Event) error {
 }
 
 func _API_GetStats_Handler(srv interface{}, stream grpc.ServerStream) error {
+    fmt.Println("###### APIServer _API_GetStats_Handler #######\r\n")
 	m := new(StatsRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err

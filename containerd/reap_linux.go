@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"fmt"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/docker/containerd/supervisor"
@@ -16,6 +17,7 @@ import (
 const signalBufferSize = 2048
 
 func startSignalHandler(supervisor *supervisor.Supervisor) {
+    fmt.Println("###### startSignalHandler #######\r\n")
 	logrus.WithFields(logrus.Fields{
 		"bufferSize": signalBufferSize,
 	}).Debug("containerd: starting signal handler")

@@ -23,10 +23,12 @@ import (
 
 // TODO: parse flags and pass opts
 func getClient(ctx *cli.Context) types.APIClient {
+    fmt.Println("###### getClient ######\r\n")
 	return types.NewAPIClient(getClientConn(ctx))
 }
 
 func getClientConn(ctx *cli.Context) *grpc.ClientConn {
+    fmt.Println("###### getClientConn ######\r\n")
 	dialOpts := []grpc.DialOption{grpc.WithInsecure()}
 	dialOpts = append(dialOpts,
 		grpc.WithDialer(func(addr string, timeout time.Duration) (net.Conn, error) {
@@ -100,11 +102,17 @@ var StartCommand = cli.Command{
 		if id == "" {
 			fatal("container id cannot be empty", 1)
 		}
+        fmt.Printf("###### StartCommand context: %v #######\r\n", context)
+        fmt.Printf("###### StartCommand context.Args(): %v #######\r\n", context.Args())
+        fmt.Printf("###### StartCommand id: %v #######\r\n", id)
+        fmt.Printf("###### StartCommand path: %v #######\r\n", path)
 		c := getClient(context)
+        fmt.Printf("###### StartCommand c: %v #######\r\n", c)
 		events, err := c.Events(netcontext.Background(), &types.EventsRequest{})
 		if err != nil {
 			fatal(err.Error(), 1)
 		}
+        fmt.Printf("###### StartCommand events: %v #######\r\n", events)
 		r := &types.CreateContainerRequest{
 			Id:         id,
 			BundlePath: path,

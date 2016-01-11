@@ -8,6 +8,7 @@ import (
 	"sync"
 	"syscall"
 	"time"
+	"fmt"
 
 	"go.pedge.io/proto/version"
 
@@ -84,8 +85,16 @@ func main() {
 	app.Usage = Usage
 	app.Authors = authors
 	app.Flags = daemonFlags
+
+    fmt.Printf("###### app.Name: %v #######\r\n", app.Name)
+    fmt.Printf("###### app.Version: %v #######\r\n", app.Version)
+    fmt.Printf("###### app.Usage: %v #######\r\n", app.Usage)
+    fmt.Printf("###### app.Authors: %v #######\r\n", app.Authors)
+    fmt.Printf("###### app.Flags: %v #######\r\n", app.Flags)
+
 	app.Before = func(context *cli.Context) error {
 		if context.GlobalBool("debug") {
+            fmt.Println("###### GlobalBool #######\r\n")
 			logrus.SetLevel(logrus.DebugLevel)
 			if err := debugMetrics(context.GlobalDuration("metrics-interval"), context.GlobalString("graphite-address")); err != nil {
 				return err
@@ -107,6 +116,7 @@ func main() {
 			logrus.Fatal(err)
 		}
 	}
+	fmt.Println("###### main prepared #######\r\n")
 	if err := app.Run(os.Args); err != nil {
 		logrus.Fatal(err)
 	}
@@ -129,6 +139,7 @@ func checkLimits() error {
 }
 
 func debugMetrics(interval time.Duration, graphiteAddr string) error {
+	fmt.Println("####### debugMetrics #######\r\n")
 	for name, m := range supervisor.Metrics() {
 		if err := metrics.DefaultRegistry.Register(name, m); err != nil {
 			return err
@@ -183,11 +194,17 @@ func processMetrics() {
 }
 
 func daemon(id, address, stateDir string, concurrency int, oom bool) error {
+    fmt.Printf("###### daemon id: %v #######\r\n", id)
+    fmt.Printf("###### daemon address: %v #######\r\n", address)
+    fmt.Printf("###### daemon stateDir: %v #######\r\n", stateDir)
+    fmt.Printf("###### daemon concurrency: %v #######\r\n", concurrency)
+    fmt.Printf("###### daemon oom: %v #######\r\n", oom)
 	tasks := make(chan *supervisor.StartTask, concurrency*100)
 	sv, err := supervisor.New(id, stateDir, tasks, oom)
 	if err != nil {
 		return err
 	}
+    fmt.Printf("###### daemon sv: %v #######\r\n", sv)
 	wg := &sync.WaitGroup{}
 	for i := 0; i < concurrency; i++ {
 		wg.Add(1)
@@ -234,6 +251,7 @@ func daemon(id, address, stateDir string, concurrency int, oom bool) error {
 func getDefaultID() string {
 	hostname, err := os.Hostname()
 	if err != nil {
+        fmt.Println("###### panic #######\r\n")
 		panic(err)
 	}
 	return hostname
