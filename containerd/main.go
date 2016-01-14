@@ -10,8 +10,6 @@ import (
 	"time"
 	"fmt"
 
-	"go.pedge.io/proto/version"
-
 	"google.golang.org/grpc"
 
 	"github.com/Sirupsen/logrus"
@@ -81,7 +79,7 @@ var daemonFlags = []cli.Flag{
 func main() {
 	app := cli.NewApp()
 	app.Name = "containerd"
-	app.Version = containerd.Version.VersionString()
+	app.Version = containerd.Version
 	app.Usage = Usage
 	app.Authors = authors
 	app.Flags = daemonFlags
@@ -234,15 +232,6 @@ func daemon(id, address, stateDir string, concurrency int, oom bool) error {
 	}
 	s := grpc.NewServer()
 	types.RegisterAPIServer(s, server.NewServer(sv))
-	protoversion.RegisterAPIServer(
-		s,
-		protoversion.NewAPIServer(
-			containerd.Version,
-			protoversion.APIServerOptions{
-				DisableLogging: true,
-			},
-		),
-	)
 	logrus.Debugf("GRPC API listen on %s", address)
 	return s.Serve(l)
 }
